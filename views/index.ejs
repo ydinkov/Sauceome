@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Command Executor</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@textea/json-viewer@3"></script>
+
+    <script src="/bundle.js"></script>
+    <script>
+        //import { JsonViewer } from '@textea/json-viewer'
+
+        function enableEdit(index) {
+            document.getElementById(`command-${index}`).readOnly = false;
+            document.getElementById(`edit-btn-${index}`).style.display = 'none';
+            document.getElementById(`save-btn-${index}`).style.display = 'inline';
+        }
+
+        function disableEdit(index) {
+            document.getElementById(`command-${index}`).readOnly = true;
+            document.getElementById(`edit-btn-${index}`).style.display = 'inline';
+            document.getElementById(`save-btn-${index}`).style.display = 'none';
+        }
+
+        function executeCommand(command) {
+            $.post('/execute', { command: command }, function(data) {
+                const resultPanel = $('#result-panel');
+                resultPanel.empty();
+                if (data.json) {
+                    const container = document.createElement('div');
+                    resultPanel.append(container);
+                    const viewer = new JsonViewer({ value: data.json }).render('#result-panel');
+                    //container.appendChild(viewer);
+                } else if (data.error) {
+                    resultPanel.text(`Error: ${data.error}`);
+                } else if (data.stderr) {
+                    resultPanel.text(`stderr: ${data.stderr}`);
+                } else {
+                    resultPanel.text(data.output);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="main-content">
+        <h1>Create a New Button</h1>
+        <form action="/add-button" method="POST">
+            <table>
+                <tr>
+                    <td><label for="label">Button Label:</label></td>
+                    <td><input type="text" id="label" name="label" required></td>
+                </tr>
+                <tr>
+                    <td><label for="command">Command:</label></td>
+                    <td><input type="text" id="command" name="command" class="command-input" required ></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button type="submit">Add Button</button></td>
+                </tr>
+            </table>
+        </form>
+
+        <h1>Buttons</h1>
+        <table>
+            <% buttons.forEach((button, index) => { %>
+            <tr>
+                <td>
+                    <button type="button" class="executeButton" onclick="executeCommand('<%= button.command %>')"><%= button.label %></button>
+                </td>
+                <td>
+                    <input type="text" class="command-input" id="command-<%= button.id %>" value="<%= button.command %>" readonly>
+                </td>
+                <td>
+                    <form action="/edit-button" method="POST" class="edit-button-from">
+                        <input type="hidden" name="id" value="<%= button.id %>">
+                        <input type="hidden" id="label-<%= button.id %>" name="label" value="<%= button.label %>">
+                        <input type="hidden" id="command-input-<%= button.id %>" name="command" value="<%= button.command %>">
+                        <button type="button" class="edit-btn" id="edit-btn-<%= button.id %>" onclick="enableEdit(<%= button.id %>)">Edit</button>
+                        <button type="submit" class="save-btn" id="save-btn-<%= button.id %>" onclick="disableEdit(<%= button.id %>); document.getElementById('command-input-<%= button.id %>').value = document.getElementById('command-<%= button.id %>').value;">Save</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="/delete-button" method="POST" class="delete-button-from">
+                        <input type="hidden" name="id" value="<%= button.id %>">
+                        <button class="delete-btn"type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </div>
+    <div id="result-panel">
+        <!-- Results will be displayed here -->
+    </div>
+</body>
+</html>

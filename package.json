@@ -1,0 +1,21 @@
+{
+  "name": "express-buttons",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@textea/json-viewer": "^3.4.1",
+    "body-parser": "^1.20.2",
+    "child_process": "^1.0.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "json-viewer-js": "^1.0.8",
+    "sqlite3": "^5.1.7"
+  }
+}

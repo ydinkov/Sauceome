@@ -1,0 +1,62 @@
+#result-panel {
+    width: 30%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+#main-content {
+    margin-right: 32%;
+}
+
+#command{
+    width: 500px;
+}
+
+
+
+.edit-button-form{
+    display: inline;
+}
+
+.edit-button-form button {
+    display: inline;
+    min-width: 100px;
+    
+}
+    .command-input{
+        width: 500px;
+    }
+    .save-btn {
+        display: none;
+        min-width: 50px;
+        background-color: aqua;
+        
+        
+    }
+    .edit-btn{
+        min-width: 50px;
+        background-color: yellowgreen;
+        color: white;
+    }
+    
+
+.delete-button-form{
+    display: inline;
+}
+    .delete-btn{
+        margin-left: 100px;
+        min-width: 50px;
+        background-color: red;
+        color: white;
+    }
+
+.executeButton{
+    display: inline;
+    font-size: large;
+    min-width: 200px;
+}
